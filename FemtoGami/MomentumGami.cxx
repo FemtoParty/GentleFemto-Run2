@@ -151,11 +151,11 @@ void MomentumGami::SetResolution(TH2F* resoMatrix, float UnitConversion) {
         }
       }
     }
-    TH2D* responsematrix = fResponseDefault->HresponseNoOverflow();
+    TH2D* responsematrix = (TH2D*)fResponseDefault->HresponseNoOverflow();
     responsematrix->SetName(TString::Format("%sRespMatrix", "").Data());
-    TH2D* responsematrixUp = fResponseUpper->HresponseNoOverflow();
+    TH2D* responsematrixUp = (TH2D*)fResponseUpper->HresponseNoOverflow();
     responsematrixUp->SetName(TString::Format("%sRespMatrixUp", "").Data());
-    TH2D* responsematrixLow = fResponseLower->HresponseNoOverflow();
+    TH2D* responsematrixLow = (TH2D*)fResponseLower->HresponseNoOverflow();
     responsematrixLow->SetName(TString::Format("%sRespMatrixLow", "").Data());
     fQAList->Add(responsematrix);
     fQAList->Add(responsematrixUp);
@@ -357,17 +357,17 @@ TH1F* MomentumGami::UnfoldviaRooResp(TH1F* InputDist, double Rescaling) {
   if (fHowToUnfold == kBayes) {
     std::cout <<" Unfolding using bayes \n ";
     RooUnfoldBayes unfolderer(resp[fResp], InputDist, fIter);
-    unfoldedHist = (TH1F*) unfolderer.Hreco();  //RooUnfold::kCovToy
+    unfoldedHist = (TH1F*) unfolderer.Hunfold();  //RooUnfold::kCovToy
     unfolderer.Print();
   } else if (fHowToUnfold == kB2B) {
     std::cout <<" Unfolding using B2B \n ";
     RooUnfoldBinByBin unfolderer(resp[fResp], InputDist);
-    unfoldedHist = (TH1F*)  unfolderer.Hreco();  //RooUnfold::kCovToy
+    unfoldedHist = (TH1F*)  unfolderer.Hunfold();  //RooUnfold::kCovToy
     unfolderer.Print();
   } else if (fHowToUnfold == kIDS) {
     std::cout <<" Unfolding using IDS \n ";
     RooUnfoldIds unfolderer(resp[fResp], InputDist, fIter);
-    unfoldedHist = (TH1F*) unfolderer.Hreco();  //RooUnfold::kCovToy
+    unfoldedHist = (TH1F*) unfolderer.Hunfold();  //RooUnfold::kCovToy
     unfolderer.Print();
   } else {
     Error("MomentumGami::UnfoldviaRooResp","This should not happen \n");
